@@ -4,32 +4,52 @@ namespace TextBasedGame
 {
     class Game
     {
-        public static void StartGame()
+        private string _name;
+
+
+        public void StartGame()
         {
             Initialise();
 
-            Start();
+            Intro();
 
             End();
         }
 
-        private static void Initialise()
+        private void Initialise()
         {
+            DateTime startTime = DateTime.Now;
+
             Console.WriteLine("----------------------------------");
             Console.WriteLine("--------SuperFancyTextGame--------");
-            Console.WriteLine("----------------------------------\n");
+            Console.WriteLine("----------------------------------");
+
+            Console.WriteLine($"Game started on: {startTime}\n\n");
         }
 
-        private static void Start()
+        private void Intro()
         {
+            while (string.IsNullOrEmpty(_name))
+            {
+                Console.WriteLine("\nGeef een naam: ");
+                _name = Console.ReadLine();
+            }
+            Console.WriteLine($"\n\n\nYou wake up in a dark room. You dont remember how you got here.\n" +
+                              $"Looking around you notice a glowing display stating your name and some more:\n\n" +
+                              $"{_name}, You have been chosen to become part of an experiment.\n" +
+                              $"Try and stay alive.\n" +
+                              $"\"Enjoy\"");
 
         }
 
-        private static void End()
+        private void End()
         {
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine($"Game ended on: {endTime}\n");
+
             Console.WriteLine("----------------------------------");
             Console.WriteLine("----------   THE  END   ----------");
-            Console.WriteLine("----------------------------------\n");
+            Console.WriteLine("----------------------------------");
         }
     }
 
@@ -37,9 +57,9 @@ namespace TextBasedGame
     {
         static void Main(string[] args)
         {
-            Game.StartGame();
+            Game game = new Game();
+            game.StartGame();
 
-            Console.WriteLine("Press any key to close this window");
             Console.ReadKey();
         }
     }
