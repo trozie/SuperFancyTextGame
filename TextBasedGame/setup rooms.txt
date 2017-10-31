@@ -1,0 +1,16 @@
+﻿--------X---------
+ L R \ H W \ S R |
+--\-----\-----\---
+ K T | C L | B R |
+------------------
+
+L R = Livingroom
+K T = Kitchen
+H L = Hallway
+C L = Cellar
+S R = Studyroom
+B R = Bedroom
+
+\ = door
+| = solid wall
+X = front door (finish)

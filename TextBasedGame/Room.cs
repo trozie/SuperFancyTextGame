@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TextBasedGame
 {
@@ -25,11 +21,18 @@ namespace TextBasedGame
 
         public static void AddAllRooms()
         {
+            var roomlist = new string[][] 
+            {
+                new string[] { "Livingroom", "Hallway", "Studyroom" },
+                new string[] { "Kitchen", "Cellar", "Bedroom" } 
+            };
+
+
             for (var i = 0; i < GridX; i++)
             {
                 for (var j = 0; j < GridY; j++)
                 {
-                    Rooms[i][j] = new Room("Living Room", new[]{new Item("Lamp Voet")} );
+                    Rooms[i][j] = new Room(roomlist[i][j], new[] { new Item("Lamp Voet") });
                 }
             }
         }
@@ -40,7 +43,7 @@ namespace TextBasedGame
             Name = name;
         }
 
-        
+
 
     }
 }
