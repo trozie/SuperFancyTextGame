@@ -13,4 +13,4 @@ B R = Bedroom
 
 \ = door
 | = solid wall
-X = front door (finish)
+X = front door (finish & boss mob)

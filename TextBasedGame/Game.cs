@@ -78,11 +78,24 @@ namespace TextBasedGame
             }
         }
 
+        public void LookAroundLight(IList<string> additionalCommands)
+        {
+            Console.WriteLine("The room is now Lit.\n" +
+                              "You see that the room contains a couch, a table and a tv screen with the \"welcome\" screen on it.\n" +
+                              "Looking for exits, you notice 2 doors and a lamp foot on the table.\n\n" +
+                              "In another room you hear glass shattering and a inhuman screech");
+        }
+
         public void End()
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             DateTime endTime = DateTime.Now;
             Console.WriteLine($"Game ended on: {endTime}\n");
+
+            var diff = endTime.Subtract(StartTime);
+            var res = String.Format("{0} day(s) {1} hour(s) {2} minute(s) and {3} second(s)", diff.Days, diff.Hours,
+                diff.Minutes, diff.Seconds);
+            Console.WriteLine($"time elapsed this game: {res}\n");
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\t    ----------------------------------");
