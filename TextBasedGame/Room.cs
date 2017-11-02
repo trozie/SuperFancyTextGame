@@ -58,7 +58,7 @@ namespace TextBasedGame
             {
                 new Item("steel harness"),
                 new Item("front door key"),
-                new Item("the colt") //  It is an old gun. On the barrel of the gun is inscribed a Latin quote: "non timebo mala". The handle has a pentagram carved into it. There is only one bullet in the colt.
+                new Item("the colt") 
             };
             Rooms[1][2].Items = new List<Item>      //bedroom
             {

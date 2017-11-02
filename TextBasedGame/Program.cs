@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using TextBasedGame.commands;
 
 namespace TextBasedGame
@@ -15,19 +18,26 @@ namespace TextBasedGame
         static void Main(string[] args)
         {
             SetupCommands();
-
             Room.AddAllRooms();
             var game = Game.StartGame(1);
 
             Lights = false;
-
+            bool WinGame = false;
+            bool VisitedHallWay = false;
+            bool VisitedStudy = false;
+            bool VisitedKitchen = false;
+            bool VisitedCellar = false;
+            bool VisitedBedRoom = false;
             var input = "";
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Note: type \"help\" for available commands");
             while (input.ToLower() != "ragequit")
             {
-                
+                if (WinGame)
+                {
+                    break;
+                }
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("What do you want to do?");
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -53,34 +63,25 @@ namespace TextBasedGame
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case "look around":
-                        if (game.Room == Room.Rooms[0][0])
-                        {
-                            if (Lights)
-                            {
-                                game.LookAroundLight(AdditionalCommands);
-                            }
-                            else
-                            {
-                                game.LookAround(AdditionalCommands);
-                            }
-                        }
-                        if (game.Room == Room.Rooms[0][1] && Lights)
-                        {
-                            game.LookAroundHallWay(AdditionalCommands);
-                        }
+
+                        LookAround(game);
+
                         break;
                     case "ragequit":
                         Console.WriteLine("A gun magically appeares in front of you. \n" +
                                           "Wanting none of this, you deside to ragequit the experiment. \n" +
                                           "\"Headbutting a bullet is the fastest way out\" was the last thought that went through your head.\n");
                         Console.WriteLine("actually the bullet was the last thing that went through your head...\n\n");
+//                        Thread.Sleep(7000);
                         Console.WriteLine(Domain.AsciiArtworks.Death);
+//                        Thread.Sleep(1000);
                         game.End();
                         break;
                     case "turn on lights":
                         if (AdditionalCommands.Contains("turn on lights"))
                         {
                             Console.WriteLine("You turned on the lights. \n" +
+                                              "The room is now Lit.\n" +
                                               "You notice the light in other rooms are on now aswell.");
                             Lights = true;
                             AdditionalCommands.Remove("turn on lights");
@@ -92,19 +93,62 @@ namespace TextBasedGame
                         }
                         break;
                     case "move to hallway":
-                        if (Lights)
+                        if (Lights && AdditionalCommands.Contains("move to hallway"))
                         {
                             game.Room = Room.Rooms[0][1];
                             Console.WriteLine("You moved to the hallway");
+                            VisitedHallWay = true;
                             AdditionalCommands.Remove("move to hallway");
                             AdditionalCommands.Remove("move to kitchen");
+                            AdditionalCommands.Remove("move to bedroom");
+                            AdditionalCommands.Remove("inspect gun");
+                            AdditionalCommands.Remove("inspect note");
+                            AdditionalCommands.Remove("inspect corpse");
+                            if (VisitedBedRoom && VisitedCellar && VisitedKitchen && VisitedStudy)
+                            {
+                                AdditionalCommands.Add("open frontdoor");
+                            }
                         }
                         break;
-                        
+                    case "move to study":
+                        if (Lights && AdditionalCommands.Contains("move to study"))
+                        {
+                            game.Room = Room.Rooms[0][2];
+                            VisitedStudy = true;
+                            Console.WriteLine("You moved to the study");
+                            AdditionalCommands.Remove("move to study");
+                            AdditionalCommands.Remove("move to cellar");
+                            AdditionalCommands.Remove("move to livingroom");
+
+                        }
+                        break;
+                    case "move to cellar":
+                        if (Lights && AdditionalCommands.Contains("move to cellar"))
+                        {
+                            game.Room = Room.Rooms[1][1];
+                            VisitedCellar = true;
+                            Console.WriteLine("You moved to the cellar");
+                            AdditionalCommands.Remove("move to study");
+                            AdditionalCommands.Remove("move to cellar");
+                            AdditionalCommands.Remove("move to livingroom");
+
+                        }
+                        break;
+                    case "move to bedroom":
+                        if (Lights && AdditionalCommands.Contains("move to bedroom"))
+                        {
+                            game.Room = Room.Rooms[1][2];
+                            VisitedBedRoom = true;
+                            Console.WriteLine("You moved to the bedroom");
+                            AdditionalCommands.Remove("move to hallway");
+                            AdditionalCommands.Remove("move to bedroom");
+                        }
+                        break;
                     case "move to kitchen":
-                        if (Lights)
+                        if (Lights && AdditionalCommands.Contains("move to kitchen"))
                         {
                             game.Room = Room.Rooms[1][0];
+                            VisitedKitchen = true;
                             Console.WriteLine("You moved to the kitchen");
                             AdditionalCommands.Remove("move to hallway");
                             AdditionalCommands.Remove("move to kitchen");
@@ -112,10 +156,45 @@ namespace TextBasedGame
                         }
                         break;
                     case "move to livingroom":
-                        if (Lights)
+                        if (Lights && AdditionalCommands.Contains("move to livingroom"))
                         {
                             game.Room = Room.Rooms[0][0];
-                            Console.WriteLine("You moved to the kitchen");
+                            Console.WriteLine("You moved to the livingroom");
+                            AdditionalCommands.Remove("move to study");
+                            AdditionalCommands.Remove("move to cellar");
+                            AdditionalCommands.Remove("move to livingroom");
+
+                        }
+                        break;
+                    case "inspect note":
+                        if (Lights && AdditionalCommands.Contains("inspect note"))
+                        {
+                            Console.WriteLine("According to legend, anything shot by this colt, using one of the original bullets,  will die. \n" +
+                                              "Including supernatural creatures normally immune to any and all weapons.");
+                            AdditionalCommands.Add("inspect gun");
+                        }
+                            break;
+                    case "inspect corpse":
+                        if (Lights && AdditionalCommands.Contains("inspect corpse"))
+                        {
+                            Console.WriteLine("Looking at the pen in his hands, he's probably the note-writer.");
+                        }
+                        break;
+                    case "open frontdoor":
+                        if (Lights && VisitedBedRoom && VisitedCellar && VisitedKitchen && VisitedStudy)
+                        {
+                            Console.WriteLine(Domain.AsciiArtworks.WinArt);
+                            WinGame = true;
+                            game.End();
+                        }
+                        break;
+                    case "inspect gun":
+                        if (Lights && AdditionalCommands.Contains("inspect gun"))
+                        {
+                            Console.WriteLine("It is an old gun.\n" +
+                                              "On the barrel of the gun is inscribed a Latin quote: \"non timebo mala\".\n" +
+                                              "The handle has a pentagram carved into it.\n" +
+                                              "There is only one bullet in the colt, the bullettip is carved with a pentagram and made of silver.");
                         }
                         break;
                     default:
@@ -130,6 +209,41 @@ namespace TextBasedGame
             Commands = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => x.GetInterfaces().Contains(typeof(ICommand)))
                 .Select(x => Activator.CreateInstance(x) as ICommand).ToList();
+        }
+
+        private static void LookAround(Game game)
+        {
+            if (game.Room == Room.Rooms[0][0])
+            {
+                if (Lights)
+                {
+                    game.LookAroundLivingRoom(AdditionalCommands);
+                }
+                else
+                {
+                    game.LookAround(AdditionalCommands);
+                }
+            }
+            if (game.Room == Room.Rooms[0][1] && Lights)
+            {
+                game.LookAroundHallWay(AdditionalCommands);
+            }
+            if (game.Room == Room.Rooms[0][2] && Lights)
+            {
+                game.LookAroundStudy(AdditionalCommands);
+            }
+            if (game.Room == Room.Rooms[1][0] && Lights)
+            {
+                game.LookAroundKitchen(AdditionalCommands);
+            }
+            if (game.Room == Room.Rooms[1][1] && Lights)
+            {
+                game.LookAroundCellar(AdditionalCommands);
+            }
+            if (game.Room == Room.Rooms[1][2] && Lights)
+            {
+                game.LookAroundBedroom(AdditionalCommands);
+            }
         }
     }
 }
