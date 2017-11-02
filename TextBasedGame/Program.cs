@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using TextBasedGame.commands;
 
 namespace TextBasedGame
 {
     internal class Program
     {
-        private static readonly IList<string> _additionalCommands = new List<string>();
+        public static IList<ICommand> Commands { get; private set; }
+        private static readonly IList<string> AdditionalCommands = new List<string>();
 
         static void Main(string[] args)
         {
+            SetupCommands();
+
             Room.AddAllRooms();
             var game = Game.StartGame(1);
             var lights = false;
@@ -22,6 +28,7 @@ namespace TextBasedGame
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("What do you want to do?");
                 Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("=> ");
                 input = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.White;
 
@@ -35,7 +42,7 @@ namespace TextBasedGame
                         Console.WriteLine("\t help\n" +
                                           "\t look around\n" +
                                           "\t ragequit");
-                        foreach (var addcommand in _additionalCommands)
+                        foreach (var addcommand in AdditionalCommands)
                         {
                             Console.WriteLine($"\t {addcommand}");
                         }
@@ -45,28 +52,28 @@ namespace TextBasedGame
                     case "look around":
                         if (lights)
                         {
-                            game.LookAroundLight(_additionalCommands);
+                            game.LookAroundLight(AdditionalCommands);
                         }
                         else
                         {
-                            game.LookAround(_additionalCommands);
+                            game.LookAround(AdditionalCommands);
                         }
                         break;
                     case "ragequit":
                         Console.WriteLine("A gun magically appeares in front of you. \n" +
-                                          "Wanting none of this, you desideto ragequit the experiment. \n" +
-                                          "\"Headbutting a bullet is the fastest way out\" was the last thing that went through your mind.\n" +
-                                          "(actually the bullet was the last thing...)\n\n");
-                        Console.WriteLine(Game.Death);
+                                          "Wanting none of this, you deside to ragequit the experiment. \n" +
+                                          "\"Headbutting a bullet is the fastest way out\" was the last thing that went through your head.\n" +
+                                          "(actually the bullet was the last thing that went trhough your head...)\n\n");
+                        Console.WriteLine(Domain.AsciiArtworks.Death);
                         game.End();
                         break;
                     case "turn on lights":
-                        if (_additionalCommands.Contains("turn on lights"))
+                        if (AdditionalCommands.Contains("turn on lights"))
                         {
                             Console.WriteLine("You turned on the lights. \n" +
                                               "You notice the light in other rooms are on now aswell.");
                             lights = true;
-                            _additionalCommands.Remove("turn on lights");
+                            AdditionalCommands.Remove("turn on lights");
                             
                         }
                         else
@@ -80,6 +87,12 @@ namespace TextBasedGame
                 }
             }
             Console.ReadKey();
+        }
+        private static void SetupCommands()
+        {
+            Commands = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(x => x.GetInterfaces().Contains(typeof(ICommand)))
+                .Select(x => Activator.CreateInstance(x) as ICommand).ToList();
         }
     }
 }
