@@ -15,6 +15,11 @@ namespace TextBasedGame
         {
             SetupCommands();
 
+            foreach (var command in Commands)
+            {
+                Console.WriteLine(command);
+            }
+
             Room.AddAllRooms();
             var game = Game.StartGame(1);
             var lights = false;
@@ -62,8 +67,10 @@ namespace TextBasedGame
                     case "ragequit":
                         Console.WriteLine("A gun magically appeares in front of you. \n" +
                                           "Wanting none of this, you deside to ragequit the experiment. \n" +
-                                          "\"Headbutting a bullet is the fastest way out\" was the last thing that went through your head.\n" +
-                                          "(actually the bullet was the last thing that went trhough your head...)\n\n");
+                                          "\"Headbutting a bullet is the fastest way out\" was the last thought that went through your head.\n");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("actually the bullet was the last thing that went through your head...\n\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine(Domain.AsciiArtworks.Death);
                         game.End();
                         break;
