@@ -10,19 +10,17 @@ namespace TextBasedGame
     {
         public static IList<ICommand> Commands { get; private set; }
         private static readonly IList<string> AdditionalCommands = new List<string>();
+        public static bool Lights { get; set; }
 
         static void Main(string[] args)
         {
             SetupCommands();
 
-            foreach (var command in Commands)
-            {
-                Console.WriteLine(command);
-            }
-
             Room.AddAllRooms();
             var game = Game.StartGame(1);
-            var lights = false;
+
+            Lights = false;
+
             var input = "";
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -55,13 +53,20 @@ namespace TextBasedGame
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case "look around":
-                        if (lights)
+                        if (game.Room == Room.Rooms[0][0])
                         {
-                            game.LookAroundLight(AdditionalCommands);
+                            if (Lights)
+                            {
+                                game.LookAroundLight(AdditionalCommands);
+                            }
+                            else
+                            {
+                                game.LookAround(AdditionalCommands);
+                            }
                         }
-                        else
+                        if (game.Room == Room.Rooms[0][1] && Lights)
                         {
-                            game.LookAround(AdditionalCommands);
+                            game.LookAroundHallWay(AdditionalCommands);
                         }
                         break;
                     case "ragequit":
@@ -77,13 +82,40 @@ namespace TextBasedGame
                         {
                             Console.WriteLine("You turned on the lights. \n" +
                                               "You notice the light in other rooms are on now aswell.");
-                            lights = true;
+                            Lights = true;
                             AdditionalCommands.Remove("turn on lights");
                             
                         }
                         else
                         {
                             Console.WriteLine($"I dont know how to {input}. (type \"help\" for available commands)\n");
+                        }
+                        break;
+                    case "move to hallway":
+                        if (Lights)
+                        {
+                            game.Room = Room.Rooms[0][1];
+                            Console.WriteLine("You moved to the hallway");
+                            AdditionalCommands.Remove("move to hallway");
+                            AdditionalCommands.Remove("move to kitchen");
+                        }
+                        break;
+                        
+                    case "move to kitchen":
+                        if (Lights)
+                        {
+                            game.Room = Room.Rooms[1][0];
+                            Console.WriteLine("You moved to the kitchen");
+                            AdditionalCommands.Remove("move to hallway");
+                            AdditionalCommands.Remove("move to kitchen");
+
+                        }
+                        break;
+                    case "move to livingroom":
+                        if (Lights)
+                        {
+                            game.Room = Room.Rooms[0][0];
+                            Console.WriteLine("You moved to the kitchen");
                         }
                         break;
                     default:

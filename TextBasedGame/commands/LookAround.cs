@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TextBasedGame.commands
 {
@@ -10,7 +8,12 @@ namespace TextBasedGame.commands
         public string Description { get { return "You look around the room"; } }
         public void Execute(Game game)
         {
-            
+            /*Console.WriteLine("The room is dark.\n" +
+                              "you notice a lightswitch on the wall through the light from the display.\n");
+            if (!AdditionalCommands.Contains("turn on lights"))
+            {
+                AdditionalCommands.Add("turn on lights");
+            }*/
         }
     }
 }

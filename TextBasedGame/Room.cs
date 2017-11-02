@@ -42,7 +42,7 @@ namespace TextBasedGame
             };
             Rooms[0][1].Items = new List<Item>      //Hallway
             {
-                new Item("thick leather coat")
+                new Item("thick leather Jacket")
             };
             Rooms[0][2].Items = new List<Item>      //Study
             {

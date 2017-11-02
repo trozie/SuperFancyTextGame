@@ -8,7 +8,7 @@ namespace TextBasedGame
 
         private string _name;
 
-        public Room Room { get; private set; } 
+        public Room Room { get; set; } 
         private int _level;
         public DateTime StartTime { get; }
         
@@ -65,13 +65,13 @@ namespace TextBasedGame
         }
 
        
-        public void LookAround(IList<string> AdditionalCommands)
+        public void LookAround(IList<string> additionalCommands)
         {
             Console.WriteLine("The room is dark.\n" +
                               "you notice a lightswitch on the wall through the light from the display.\n");
-            if (!AdditionalCommands.Contains("turn on lights"))
+            if (!additionalCommands.Contains("turn on lights"))
             {
-                AdditionalCommands.Add("turn on lights");
+                additionalCommands.Add("turn on lights");
             }
         }
 
@@ -79,8 +79,35 @@ namespace TextBasedGame
         {
             Console.WriteLine("The room is now Lit.\n" +
                               "You see that the room contains a couch, a standing lamp without a hood, a table and a tv screen with the \"welcome message\" shown on it.\n" +
-                              "Looking for exits, you notice 2 doors; one to the kitchen and one to the hallway.\n\n" +
+                              "Looking for exits, you notice 2 doors; one to the kitchen, and one to the hallway .\n\n" +
                               "In another room you hear glass shattering followed by an inhuman screech");
+            if (!additionalCommands.Contains("move to kitchen"))
+            {
+                additionalCommands.Add("move to kitchen");
+            }
+
+            if (!additionalCommands.Contains("move to hallway"))
+            {
+                additionalCommands.Add("move to hallway");
+            }
+        }
+
+        public void LookAroundHallWay (IList<string> additionalCommands)
+        {
+            Console.WriteLine(" The hallway is quite large and you see 4 doors. the front door, the study, the cellar and the door back to the livingroom.\n" +
+                              "you notice a thick leather jacket on the coat rack.\n");
+            additionalCommands.Add("move to study");
+            additionalCommands.Add("move to cellar");
+            additionalCommands.Add("move to livingroom");
+
+        }
+
+        public void LookAroundKitchen(IList<string> additionalCommands)
+        {
+            Console.WriteLine(" The kitchen is a complete mess. there are no other doors exept the door of the livingroom.\n" +
+                              "you notice a cleaver stuck in the kitchen table and a key labled \"bedroom\" nearby.\n");
+            additionalCommands.Add("move to livingroom");
+
         }
 
         public void End()

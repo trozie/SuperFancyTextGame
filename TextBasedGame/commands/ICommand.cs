@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TextBasedGame.commands
+﻿namespace TextBasedGame.commands
 {
     public interface ICommand
     {
