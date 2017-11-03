@@ -11,7 +11,7 @@ Help
 v	Info wat iemand kan doen
 
 Room
-x	Navigatie van en naar een ruimte
+v	Navigatie van en naar een ruimte
 v	If finish > done (oid)
 v		Eind tijd
 
