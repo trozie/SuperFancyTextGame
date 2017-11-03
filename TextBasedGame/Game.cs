@@ -7,7 +7,7 @@ namespace TextBasedGame
     public class Game
     {
 
-        private string _name;
+        public string _name { get; private set; }
 
         public Room Room { get; set; } 
         private int _level;

@@ -212,7 +212,7 @@ namespace TextBasedGame
                         if (Lights && AdditionalCommands.Contains("inspect gun"))
                         {
                             Console.WriteLine("It is an old gun.\n" +
-                                              "On the barrel of the gun is inscribed a Latin quote: \"non timebo mala\".\n" +
+                                              "On the barrel of the gun is inscribed a Latin quote: \"non timebo mala\". if my latin serves correct, it means:\"I will fear no evil\"\n" +
                                               "The handle has a pentagram carved into it.\n" +
                                               "There is only one bullet in the colt, the bullettip is carved with a pentagram and made of silver.");
                         }
@@ -232,10 +232,20 @@ namespace TextBasedGame
                         }
                         break;
                     case "take frontdoorkey":
-                        if (Lights && game.Room == Room.Rooms[1][1] && Cellarkey == false)
+                        if (Lights && game.Room == Room.Rooms[1][1] && Frontdoorkey == false)
                         {
                             Console.WriteLine("you took the frontdoorkey");
                             Frontdoorkey = true;
+                        }
+                        break;
+                    case "hack win":
+                        {
+                            if (game._name == "Twan")
+                            {
+                                Console.WriteLine(Domain.AsciiArtworks.WinArt);
+                                WinGame = true;
+                                game.End();
+                            }
                         }
                         break;
                     default:

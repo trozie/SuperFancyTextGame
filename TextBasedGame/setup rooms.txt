@@ -1,6 +1,6 @@
 ﻿--------X---------
  L R \ H W \ S R |
---\-----\-----\---
+--\-----/-----/---
  K T | C L | B R |
 ------------------
 
@@ -13,4 +13,5 @@ B R = Bedroom
 
 \ = door
 | = solid wall
-X = front door (finish & boss mob)
+/ = locked door
+X = locked front door (finish & boss mob)
