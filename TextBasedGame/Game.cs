@@ -42,12 +42,12 @@ namespace TextBasedGame
             Console.WriteLine("\t    --------SuperFancyTextGame--------");
             Console.WriteLine("\t    ----------------------------------");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-//            Thread.Sleep(600);
+            Thread.Sleep(600);
             Console.WriteLine(Domain.AsciiArtworks.InitArt);
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-//            Thread.Sleep(200);
+            Thread.Sleep(200);
             Console.WriteLine($"Game started on:{StartTime}\n\n");
-//            Thread.Sleep(100);
+            Thread.Sleep(100);
             while (string.IsNullOrEmpty(_name))
             {
                 Console.WriteLine("\nHello Player! What is your name? ");
@@ -102,6 +102,7 @@ namespace TextBasedGame
             Console.WriteLine("The kitchen is a complete mess. there are no other doors exept the door of the livingroom.\n" +
                               "you notice a cleaver stuck in the kitchen table and a key labled \"bedroom\" nearby.\n");
             AdditionalCommands.Add("move to livingroom");
+            AdditionalCommands.Add("take bedroomkey");
         }
 
         public void LookAroundCellar(IList<string> AdditionalCommands)
@@ -114,6 +115,7 @@ namespace TextBasedGame
             AdditionalCommands.Add("move to hallway");
             AdditionalCommands.Add("inspect note");
             AdditionalCommands.Add("inspect corpse");
+            AdditionalCommands.Add("take frontdoorkey");
         }
         public void LookAroundStudy(IList<string> AdditionalCommands)
         {
@@ -130,6 +132,7 @@ namespace TextBasedGame
                               "the bedroom is only attached to the study.\n" +
                               "on the bed lies a key and a bloody note.");
             AdditionalCommands.Add("move to study");
+            AdditionalCommands.Add("take cellarkey");
         }
 
         public void End()
@@ -141,7 +144,7 @@ namespace TextBasedGame
             var res = String.Format("{0} day(s) {1} hour(s) {2} minute(s) and {3} second(s)", diff.Days, diff.Hours,
                 diff.Minutes, diff.Seconds);
             Console.WriteLine($"time elapsed this game: {res}\n");
-//            Thread.Sleep(400);
+            Thread.Sleep(400);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\t    ----------------------------------");
             Console.WriteLine("\t    ----------   THE  END   ----------");

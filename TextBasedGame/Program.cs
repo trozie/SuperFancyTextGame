@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Xml.Linq;
 using TextBasedGame.commands;
 
 namespace TextBasedGame
@@ -22,6 +23,9 @@ namespace TextBasedGame
             var game = Game.StartGame(1);
 
             Lights = false;
+            bool Bedroomkey = false;
+            bool Cellarkey = false;
+            bool Frontdoorkey = false;
             bool WinGame = false;
             bool VisitedHallWay = false;
             bool VisitedStudy = false;
@@ -104,7 +108,8 @@ namespace TextBasedGame
                             AdditionalCommands.Remove("inspect gun");
                             AdditionalCommands.Remove("inspect note");
                             AdditionalCommands.Remove("inspect corpse");
-                            if (VisitedBedRoom && VisitedCellar && VisitedKitchen && VisitedStudy)
+                            AdditionalCommands.Remove("take frontdoorkey");
+                            if (Frontdoorkey)
                             {
                                 AdditionalCommands.Add("open frontdoor");
                             }
@@ -119,29 +124,43 @@ namespace TextBasedGame
                             AdditionalCommands.Remove("move to study");
                             AdditionalCommands.Remove("move to cellar");
                             AdditionalCommands.Remove("move to livingroom");
+                            AdditionalCommands.Remove("take cellarkey");
 
                         }
                         break;
                     case "move to cellar":
                         if (Lights && AdditionalCommands.Contains("move to cellar"))
                         {
-                            game.Room = Room.Rooms[1][1];
-                            VisitedCellar = true;
-                            Console.WriteLine("You moved to the cellar");
-                            AdditionalCommands.Remove("move to study");
-                            AdditionalCommands.Remove("move to cellar");
-                            AdditionalCommands.Remove("move to livingroom");
-
+                            if (Cellarkey)
+                            {
+                                game.Room = Room.Rooms[1][1];
+                                VisitedCellar = true;
+                                Console.WriteLine("You moved to the cellar");
+                                AdditionalCommands.Remove("move to study");
+                                AdditionalCommands.Remove("move to cellar");
+                                AdditionalCommands.Remove("move to livingroom");
+                            }
+                            else
+                            {
+                                Console.WriteLine("cellar door seems to be locked");
+                            }
                         }
                         break;
                     case "move to bedroom":
                         if (Lights && AdditionalCommands.Contains("move to bedroom"))
                         {
-                            game.Room = Room.Rooms[1][2];
-                            VisitedBedRoom = true;
-                            Console.WriteLine("You moved to the bedroom");
-                            AdditionalCommands.Remove("move to hallway");
-                            AdditionalCommands.Remove("move to bedroom");
+                            if (Bedroomkey)
+                            {
+                                game.Room = Room.Rooms[1][2];
+                                VisitedBedRoom = true;
+                                Console.WriteLine("You moved to the bedroom");
+                                AdditionalCommands.Remove("move to hallway");
+                                AdditionalCommands.Remove("move to bedroom");
+                            }
+                            else
+                            {
+                                Console.WriteLine("bedroom door seems to be locked");
+                            }
                         }
                         break;
                     case "move to kitchen":
@@ -163,6 +182,7 @@ namespace TextBasedGame
                             AdditionalCommands.Remove("move to study");
                             AdditionalCommands.Remove("move to cellar");
                             AdditionalCommands.Remove("move to livingroom");
+                            AdditionalCommands.Remove("take bedroomkey");
 
                         }
                         break;
@@ -181,7 +201,7 @@ namespace TextBasedGame
                         }
                         break;
                     case "open frontdoor":
-                        if (Lights && VisitedBedRoom && VisitedCellar && VisitedKitchen && VisitedStudy)
+                        if (Lights && Frontdoorkey)
                         {
                             Console.WriteLine(Domain.AsciiArtworks.WinArt);
                             WinGame = true;
@@ -195,6 +215,27 @@ namespace TextBasedGame
                                               "On the barrel of the gun is inscribed a Latin quote: \"non timebo mala\".\n" +
                                               "The handle has a pentagram carved into it.\n" +
                                               "There is only one bullet in the colt, the bullettip is carved with a pentagram and made of silver.");
+                        }
+                        break;
+                    case "take bedroomkey":
+                        if (Lights && game.Room == Room.Rooms[1][0] && Bedroomkey == false)
+                        {
+                            Console.WriteLine("you took the bedroomkey");
+                            Bedroomkey = true;
+                        }
+                        break;
+                    case "take cellarkey":
+                        if (Lights && game.Room == Room.Rooms[1][2] && Cellarkey == false)
+                        {
+                            Console.WriteLine("you took the cellarkey");
+                            Cellarkey = true;
+                        }
+                        break;
+                    case "take frontdoorkey":
+                        if (Lights && game.Room == Room.Rooms[1][1] && Cellarkey == false)
+                        {
+                            Console.WriteLine("you took the frontdoorkey");
+                            Frontdoorkey = true;
                         }
                         break;
                     default:
